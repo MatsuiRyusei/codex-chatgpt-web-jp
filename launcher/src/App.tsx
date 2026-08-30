@@ -234,6 +234,13 @@ function Onboarding({
                 marker="简"
                 onClick={() => setSelectedLanguage("zh-CN")}
               />
+              <WelcomeOption
+                active={selectedLanguage === "ja"}
+                detail="日本語"
+                label="日本語"
+                marker="日"
+                onClick={() => setSelectedLanguage("ja")}
+              />
             </div>
           ) : (
             <div className="welcome-options">
@@ -1731,6 +1738,7 @@ function LanguageMenu({ language, onChange }: { language: Language; onChange: (l
   const options: Array<{ label: string; value: Language }> = [
     { label: "English", value: "en" },
     { label: "简体中文", value: "zh-CN" },
+    { label: "日本語", value: "ja" },
   ];
   const selected = options.find((option) => option.value === language) ?? options[0];
 
