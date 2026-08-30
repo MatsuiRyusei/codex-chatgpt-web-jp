@@ -24,6 +24,7 @@ const expected = [
   ["scripts/install.sh", `VERSION=\"\${CODEX_CHATGPT_WEB_VERSION:-${packageVersion}}\"`],
   ["README.md", `requires Bun ${bunVersion}.`],
   ["README.zh-CN.md", `Bun ${bunVersion}`],
+  ["README.ja.md", `Bun ${bunVersion}`],
   ["scripts/install.sh", `Bun-${bunVersion}.md`],
   ["scripts/generate-third-party-notices.ts", `Bun ${bunVersion}`],
   ["scripts/prepare-windows-baseline-bun.ps1", `bun-v$Version`],

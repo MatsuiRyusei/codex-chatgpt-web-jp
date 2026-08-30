@@ -339,7 +339,9 @@ async function loadRenderer(window) {
 }
 
 function validateLanguage(value) {
-  if (value !== "en" && value !== "zh-CN") throw new Error("Language must be en or zh-CN");
+  if (value !== "en" && value !== "zh-CN" && value !== "ja") {
+    throw new Error("Language must be en, zh-CN, or ja");
+  }
   return value;
 }
 
@@ -517,18 +519,23 @@ function registerIpc({ logger, stateStore }) {
     if (IS_DEV_PROFILE) throw new Error("DEV profile has no Codex integration to remove");
     const language = stateStore.read().language;
     const chinese = language === "zh-CN";
+    const japanese = language === "ja";
     const confirmation = await dialog.showMessageBox(mainWindow, {
       type: "warning",
-      buttons: chinese ? ["取消", "移除"] : ["Cancel", "Remove"],
+      buttons: japanese ? ["キャンセル", "削除"] : chinese ? ["取消", "移除"] : ["Cancel", "Remove"],
       defaultId: 0,
       cancelId: 0,
-      title: chinese ? "移除 Codex Web GPT" : "Remove Codex Web GPT",
-      message: chinese
-        ? "从 Codex 中移除 ChatGPT Web 模型并恢复此前的模型路由？"
-        : "Remove the ChatGPT Web models from Codex and restore the previous model route?",
-      detail: chinese
-        ? "启动器中的 ChatGPT 登录 profile 会保留。Codex 需要重启一次。"
-        : "The launcher's ChatGPT login profile will be preserved. Codex must be restarted once.",
+      title: japanese ? "Codex Web GPT を削除" : chinese ? "移除 Codex Web GPT" : "Remove Codex Web GPT",
+      message: japanese
+        ? "Codex から ChatGPT Web モデルを削除し、以前のモデルルートを復元しますか？"
+        : chinese
+          ? "从 Codex 中移除 ChatGPT Web 模型并恢复此前的模型路由？"
+          : "Remove the ChatGPT Web models from Codex and restore the previous model route?",
+      detail: japanese
+        ? "ランチャーの ChatGPT ログインプロファイルは保持されます。Codex を一度再起動する必要があります。"
+        : chinese
+          ? "启动器中的 ChatGPT 登录 profile 会保留。Codex 需要重启一次。"
+          : "The launcher's ChatGPT login profile will be preserved. Codex must be restarted once.",
       noLink: true,
     });
     if (confirmation.response !== 1) return { cancelled: true };

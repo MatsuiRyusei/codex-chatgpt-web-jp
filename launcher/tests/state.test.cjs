@@ -33,7 +33,7 @@ test("launcher state persists onboarding, language, and autostart atomically", (
       sessionRefreshReminderAt: null,
     });
     store.update({
-      language: "zh-CN",
+      language: "ja",
       onboardingComplete: true,
       keepRunningOnClose: false,
       browserSmokePassed: true,
@@ -41,7 +41,7 @@ test("launcher state persists onboarding, language, and autostart atomically", (
     });
     assert.deepEqual(createStateStore(file).read(), {
       version: 1,
-      language: "zh-CN",
+      language: "ja",
       onboardingComplete: true,
       githubOpened: false,
       xOpened: false,
