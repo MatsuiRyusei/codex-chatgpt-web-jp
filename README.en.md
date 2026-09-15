@@ -10,13 +10,22 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/miuuyy/codex-chatgpt-web/actions/workflows/ci.yml"><img src="https://github.com/miuuyy/codex-chatgpt-web/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="TROUBLESHOOTING.md">Troubleshooting</a> · <a href="SECURITY.md">Security</a> · <a href="CONTRIBUTING.md">Contributing</a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/MatsuiRyusei/codex-chatgpt-web-jp/actions/workflows/ci.yml"><img src="https://github.com/MatsuiRyusei/codex-chatgpt-web-jp/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT license"></a>
   <img src="https://img.shields.io/badge/macOS-arm64%20%7C%20x64-black?logo=apple" alt="macOS arm64 and x64">
   <img src="https://img.shields.io/badge/Windows-x64-0078d4?logo=windows11" alt="Windows x64">
   <img src="https://img.shields.io/badge/Linux-x64-fcc624?logo=linux&logoColor=black" alt="Linux x64">
   <img src="https://img.shields.io/badge/Free_AI-no_API_fees-10a37f" alt="Free AI with no API fees">
 </p>
+
+> [!NOTE]
+> This is a Japanese-localized fork of [miuuyy/codex-chatgpt-web](https://github.com/miuuyy/codex-chatgpt-web).
+> Synchronized with upstream **5.0.6** (`e85e369`, 2026-09-08), preserving the original MIT License and copyright notices.
+> The installer commands below use upstream releases. To run this fork, use **Run from source**.
 
 Free and Go accounts get **ChatGPT Web — Luna** in Codex's native model picker. Accounts that
 expose the reasoning selector keep **Instant**, **Medium**, **High**, **Extra High**, and **Pro** as
@@ -39,7 +48,7 @@ routes only the selected model task through a task-bound ChatGPT Temporary Chat;
 connects ChatGPT back to the tools of that same Codex task until its next compaction boundary.
 
 > [!TIP]
-> I also built **[ChatGPT Persona Voice](https://github.com/miuuyy/ChatGPT-Persona-Voice)**, a local
+> The upstream author also built **[ChatGPT Persona Voice](https://github.com/miuuyy/ChatGPT-Persona-Voice)**, a local
 > app that changes the ChatGPT/Codex voice in near real time. It never touches your account, browser
 > session, or ChatGPT requests, so using it carries no account-blocking risk. If you like my work,
 > give it a try.
@@ -101,8 +110,8 @@ model API key, installed Chrome/Chromium, system Node/Bun, or project-managed br
 **Run from source**
 
 ```bash
-git clone https://github.com/miuuyy/codex-chatgpt-web.git && \
-cd codex-chatgpt-web && \
+git clone https://github.com/MatsuiRyusei/codex-chatgpt-web-jp.git && \
+cd codex-chatgpt-web-jp && \
 bun run app
 ```
 
@@ -113,12 +122,18 @@ This source path requires Bun 1.4.0. The command installs locked dependencies an
 | Mode | Models | Local Codex tools | Extra setup |
 | --- | --- | --- | --- |
 | **Browser-only** | Free/Go: Luna; Plus: Instant–High; Pro: adds Extra High and Pro | No; Codex shows a warning | None |
-| **Full harness** | Free/Go: Luna; Plus: Instant–High; Pro: adds Extra High and Pro | Yes for every listed effort, including Pro | OpenAI tunnel + ChatGPT connector |
+| **Full harness (With Automation)** | Free/Go: Luna; Plus: Instant–High; Pro: adds Extra High and Pro | Yes for every listed effort, including Pro | OpenAI tunnel + ChatGPT connector |
+| **Zero Risk** | Choose the ChatGPT model and effort manually; optional Pro-sized context | Yes; the full turn-bound Codex harness remains available | Separate OpenAI tunnel + `Codex Zero Risk` connector; paste and send manually |
 
-Every picker entry has one fixed ChatGPT mode. Codex still displays its built-in Effort and Speed
-rows, but changing them cannot silently change the selected browser model. In Full mode every
-available effort receives the same turn-bound MCP capability. Pro has no separate restriction or
-reduced tool contract.
+Each automatic picker entry has one fixed ChatGPT mode. Codex still displays its built-in Effort and
+Speed rows, but changing them cannot silently change the selected browser model. In automatic Full
+mode every available effort receives the same turn-bound MCP capability. Pro has no separate
+restriction or reduced tool contract.
+
+Zero Risk keeps the local Responses bridge and full Codex harness, but never reads or changes the
+ChatGPT page and never sends a prompt for you. The launcher prepares and copies the prompt; you
+choose the model, effort, and `Codex Zero Risk` connector, then paste and send it yourself. This
+removes the account risk specifically associated with ChatGPT web automation.
 
 ## Full harness
 
@@ -126,26 +141,22 @@ Full mode connects ChatGPT's tool calls back to the current Codex task through t
 [OpenAI tunnel-client](https://github.com/openai/tunnel-client). The tunnel is outbound: it does
 not expose a public IP, open an inbound port, or require router forwarding.
 
-> [!WARNING]
-> Create a **new** connector named **Codex Native2** and set its permissions to
-> **Allow all actions**. Do not rename, refresh, or reuse an older **Codex Native** connector:
-> ChatGPT caches the public MCP contract by connector identity, and **Allow low-risk actions**
-> blocks commands and patches before they reach the Codex harness.
+The launcher's **MCP** page guides the complete setup. For the exact clicks, see the
+[video walkthroughs](TROUBLESHOOTING.md).
 
-1. Finish the required launcher setup.
-2. Open **MCP** in the launcher. Create the Tunnel and a regular API key on the same OpenAI account
-   that will use the ChatGPT connector; creating the key is free and does not consume model API
-   credits.
-3. Paste the Tunnel ID and API key, then press **Connect harness**.
-4. Enable **Developer Mode** in ChatGPT settings. Create a **new** connector using **Tunnel**, select
-   that exact Tunnel, set **Authentication** to **None**, and name it exactly **Codex Native2**.
-5. If an older **Codex Native** connector exists, leave it untouched. Do not rename or refresh it:
-   ChatGPT caches the public MCP contract by connector identity, and this release uses a new direct
-   turn-token contract. Under **Permissions** on **Codex Native2**, choose **Allow all actions**;
-   **Allow low-risk actions** blocks commands and patches before they reach this runtime. The outer
-   Codex harness still enforces its sandbox and approvals.
-6. Run **Verify runtime**. It selects **Codex Native2** exactly. If only **Codex Native** is found,
-   verification fails with an explicit migration error instead of accepting the legacy connector.
+> **Limits**
+>
+> See [Limits](https://github.com/miuuyy/codex-chatgpt-web/discussions/309) for the current
+> ChatGPT message allowances for **GPT-5.6 Sol Pro** and **GPT-6 Astra**. Context limits depend on
+> the account type and selected effort. Plus Medium/High uses a measured 90,000-token window, or
+> up to 270,000 tokens with experimental **3× context** enabled, with native Codex compaction
+> supported throughout.
+
+1. Finish the required setup, open **MCP**, create the Tunnel and regular API key, then press
+   **Connect harness**.
+2. Enable ChatGPT **Developer Mode** and create a new Tunnel connector named exactly
+   **Codex Native2**, with **Authentication: None** and **Allow all actions**.
+3. Run **Verify runtime** to confirm that **Codex Native2** is attached and available.
 
 Write/modify actions also require the ChatGPT workspace and its administrator policy to permit
 them. See
@@ -218,6 +229,7 @@ reused implicitly. See
 - [Architecture](docs/architecture.md)
 - [DEV chat harness](docs/dev-chat.md)
 - [Security model](docs/security-model.md)
+- [Troubleshooting](TROUBLESHOOTING.md)
 - [Contributing](CONTRIBUTING.md)
 
 ## Star History
@@ -235,3 +247,5 @@ reused implicitly. See
 This is independent software and is not affiliated with or endorsed by OpenAI. Use it only with
 your own account and in accordance with applicable [Terms of Use](https://openai.com/policies/terms-of-use/)
 and workspace policies; it does not bypass authentication or access controls.
+
+Having trouble? See [Troubleshooting](TROUBLESHOOTING.md) for common problems and their solutions.

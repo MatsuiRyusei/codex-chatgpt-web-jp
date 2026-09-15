@@ -1,8 +1,8 @@
 <h1 align="center">ChatGPT Web for Codex — 日本語版</h1>
 
 <p align="center">
-  <strong>ChatGPT Web（Pro を含む）を Codex のネイティブモデルとして利用。</strong><br>
-  モデルのティアを切り替えながら、これまでのワークフローをそのまま使えます。
+  <strong>ChatGPT Web（Pro を含む）を Codex のネイティブモデルとして使用。</strong><br>
+  モデルの利用枠を切り替えて、いつものワークフローを維持できます。
 </p>
 
 <p align="center">
@@ -10,73 +10,76 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/miuuyy/codex-chatgpt-web/actions/workflows/ci.yml"><img src="https://github.com/miuuyy/codex-chatgpt-web/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT license"></a>
-  <img src="https://img.shields.io/badge/macOS-arm64%20%7C%20x64-black?logo=apple" alt="macOS arm64 and x64">
+  <a href="TROUBLESHOOTING.md">トラブルシューティング</a> · <a href="SECURITY.md">セキュリティ</a> · <a href="CONTRIBUTING.md">コントリビューション</a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/MatsuiRyusei/codex-chatgpt-web-jp/actions/workflows/ci.yml"><img src="https://github.com/MatsuiRyusei/codex-chatgpt-web-jp/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT ライセンス"></a>
+  <img src="https://img.shields.io/badge/macOS-arm64%20%7C%20x64-black?logo=apple" alt="macOS arm64 および x64">
   <img src="https://img.shields.io/badge/Windows-x64-0078d4?logo=windows11" alt="Windows x64">
   <img src="https://img.shields.io/badge/Linux-x64-fcc624?logo=linux&logoColor=black" alt="Linux x64">
-  <img src="https://img.shields.io/badge/Free_AI-no_API_fees-10a37f" alt="Free AI with no API fees">
+  <img src="https://img.shields.io/badge/Free_AI-no_API_fees-10a37f" alt="API 料金なしの AI">
 </p>
 
 > [!NOTE]
-> このリポジトリは [miuuyy/codex-chatgpt-web](https://github.com/miuuyy/codex-chatgpt-web) をベースにした日本語ローカライズ版です。
-> 元プロジェクトの MIT License と著作権表示を引き継いでいます。
+> このリポジトリは [miuuyy/codex-chatgpt-web](https://github.com/miuuyy/codex-chatgpt-web) をベースにした日本語版です。
+> 上流 **5.0.6**（`e85e369`、2026-09-08）に同期し、元プロジェクトの MIT License と著作権表示を引き継いでいます。
+> 以下のインストーラーは上流のリリースを使用します。この日本語版を実行する場合は、**ソースから実行**を参照してください。
 
-Free / Go アカウントでは Codex のネイティブモデル選択画面に **ChatGPT Web — Luna** が表示されます。
-reasoning セレクターを利用できるアカウントでは、契約内容に応じて **Instant**、**Medium**、**High**、
-**Extra High**、**Pro** を利用できます。ブリッジは現在の Codex タスクのコンパイル済みコンテキストを
-新しい ChatGPT Temporary Chat に送り、画像を添付し、表示可能な reasoning、ツール実行状況、Markdown を
-同じ Codex タスクへストリーミングで返します。
+Free および Go アカウントでは、Codex のネイティブモデル選択画面に
+**ChatGPT Web — Luna** が追加されます。reasoning セレクターが表示されるアカウントでは、
+サブスクリプションで利用可能な **Instant**、**Medium**、**High**、**Extra High**、**Pro** を使用できます。
+ブリッジは、コンパイル済みの現在の Codex タスクコンテキストを新しい ChatGPT 一時チャットへ送り、
+画像を添付し、表示される reasoning、ツールアクティビティ、Markdown を同じ Codex タスクへストリーミングします。
 
 <p align="center">
-  <img src="assets/demo.gif" alt="ネイティブ Codex ハーネス上で動作する ChatGPT Web" width="960">
+  <img src="assets/demo.gif" alt="ネイティブ Codex ハーネスを使用する ChatGPT Web ターン" width="960">
 </p>
 
 ```text
-Codex task ──Responses + SSE──▶ codex-chatgpt-web ──embedded browser──▶ ChatGPT
-     ▲                                │                                      │
-     └──────── native UI, context, images, tracing, and tool lifecycle ──────┘
+Codex タスク ──Responses + SSE──▶ codex-chatgpt-web ──内蔵ブラウザー──▶ ChatGPT
+      ▲                                  │                              │
+      └──── ネイティブ UI、コンテキスト、画像、トレース、ツールライフサイクル ────┘
 ```
 
-Codex 側ではネイティブのタスク、コンテキストライフサイクル、UI、ツールハーネスを維持します。
-ローカル Responses ブリッジは選択されたモデルのタスクだけを、そのタスクに紐づいた
-ChatGPT Temporary Chat にルーティングします。Full モードでは、次の compaction 境界まで MCP が
-ChatGPT を同じ Codex タスクのツールへ再接続します。
+Codex はネイティブのタスク、コンテキストライフサイクル、UI、ツールハーネスを維持します。
+ローカル Responses ブリッジは、選択されたモデルのタスクだけをタスクに紐付いた ChatGPT 一時チャットへルーティングします。
+Full モードでは、次のコンパクション境界まで、MCP が ChatGPT を同じ Codex タスクのツールへ接続します。
 
 > [!TIP]
-> 作者は **[ChatGPT Persona Voice](https://github.com/miuuyy/ChatGPT-Persona-Voice)** も公開しています。
-> ChatGPT / Codex の音声をほぼリアルタイムで変更するローカルアプリで、アカウント、ブラウザーセッション、
-> ChatGPT リクエストには触れません。
+> 元プロジェクトの作者は **[ChatGPT Persona Voice](https://github.com/miuuyy/ChatGPT-Persona-Voice)** も開発しています。
+> ChatGPT/Codex の音声をローカル環境でほぼリアルタイムに変換するアプリです。
+> アカウント、ブラウザーセッション、ChatGPT リクエストには一切触れないため、
+> 使用によってアカウントがブロックされるリスクはありません。気に入っていただけたら、ぜひお試しください。
 
-## 主な特徴
+## 主な特長
 
-- **Codex のネイティブモデルとして動作。** ChatGPT Web は Codex のモデル選択画面から起動され、
-  元のタスク UI、コンテキストライフサイクル、ストリーミング、トレース、ツール表示はそのまま維持されます。
-- **MCP 経由で Codex ハーネス全体を利用。** Full モードでは、Pro を含むログイン中アカウントで利用可能な
-  各 effort から、アクティブなタスクのファイルシステム、シェル、画像、承認、設定済みツール / アプリを利用できます。
-- **継続的なタスクセッションとネイティブ compaction。** 連続したメッセージは、タスクに紐づいた
-  1つの Temporary Chat を再利用します。コンテキスト境界では保持中のエージェントがチェックポイントを
-  書き込んでから Codex が新しいチャットを開始し、チャットが閉じられていた場合は正規の Codex 履歴が
-  フォールバックとして使われます。
-- **クロスプラットフォームの統合ランチャー。** macOS、Windows、Linux のアプリからログイン、
-  モデル設定、MCP ガイド、ヘルスチェック、安全な診断、最大5つのタスク別ブラウザータブを扱えます。
-- **問題時は明示的に停止。** モデルやツールが見つからない場合、または ChatGPT UI が変更された場合は、
-  別ルートや別機能へ暗黙に切り替えずエラーを表示します。End-to-end の確認項目は
-  [release validation](docs/release-validation.md) を参照してください。
+- **Codex のネイティブモデル。** ChatGPT Web は Codex のモデル選択画面から実行され、元のタスク UI、
+  コンテキストライフサイクル、ストリーミング、トレース、ツール表示はそのまま維持されます。
+- **MCP 経由の完全な Codex ハーネス。** Full モードでは、Pro を含め、サインイン中のアカウントで
+  利用可能なすべての effort から、実行中タスクのファイルシステム、シェル、画像、承認、設定済みツール／アプリを使用できます。
+- **継続的なタスクセッションとネイティブコンパクション。** 連続するメッセージは、タスクに紐付いた
+  1 つの一時チャットを再利用します。コンテキスト境界に達すると、保持中のエージェントがチェックポイントを書き、
+  その後 Codex が新しいチャットを開始します。チャットが閉じられていた場合は、正規の Codex 履歴がフォールバックになります。
+- **1 つのクロスプラットフォームランチャー。** macOS、Windows、Linux 向けアプリが、サインイン、
+  モデル設定、MCP ガイド、ヘルスチェック、安全な診断、最大 5 件の表示可能なタスク紐付きブラウザータブを管理します。
+- **Fail-closed 動作。** モデルやツールの欠落、ChatGPT UI の変更が発生した場合、ルートや機能を黙って切り替えず、
+  明示的なエラーを返します。エンドツーエンドの対象範囲は
+  [リリース検証](docs/release-validation.md)に記載されています。
 
-Temporary Chat は ChatGPT のプライバシーモードであり、匿名化やローカル推論ではありません。
-プロンプトは引き続き OpenAI で処理され、アカウント設定および OpenAI の
-[Temporary Chat ポリシー](https://help.openai.com/en/articles/8914046-temporary-chat-faq) が適用されます。
-このプロジェクトは非公式であり、利用者は適用される OpenAI の規約とワークスペースポリシーを
-遵守する責任があります。
+一時チャットは ChatGPT のプライバシーモードであり、匿名化やローカル推論ではありません。
+プロンプトは引き続き OpenAI によって処理され、アカウント設定および OpenAI の
+[一時チャットポリシー](https://help.openai.com/en/articles/8914046-temporary-chat-faq)が適用されます。
+このプロジェクトは非公式です。適用される OpenAI の利用規約とワークスペースポリシーを守る責任は利用者にあります。
 
 ## クイックスタート
 
-公式のデスクトップランチャーをインストールまたは更新する場合は、元プロジェクトのリリースを利用できます。
-既存インストールの更新・修復では、ランチャーを終了して同じコマンドを再実行してください。
-ChatGPT プロファイルとランチャー設定を残したまま、アプリと内蔵ランタイムが置き換えられます。
+デスクトップランチャーをインストールまたは更新します。既存のインストールを更新・修復する場合は、
+ランチャーを終了して同じコマンドをもう一度実行してください。ChatGPT プロファイルとランチャー設定を保持したまま、
+アプリケーションと内蔵ランタイムが置き換えられます。
 
-**macOS / Linux**
+**macOS または Linux**
 
 ```bash
 curl -fsSL https://github.com/miuuyy/codex-chatgpt-web/releases/latest/download/install-launcher.sh | sh
@@ -88,23 +91,22 @@ curl -fsSL https://github.com/miuuyy/codex-chatgpt-web/releases/latest/download/
 irm https://github.com/miuuyy/codex-chatgpt-web/releases/latest/download/install-launcher.ps1 | iex
 ```
 
-アプリでは次の3項目を完了します。
+アプリ内で次の 3 項目を完了します。
 
-1. ランチャー内蔵の ChatGPT ブラウザーから直接ログインします。ログインページや ID プロバイダーの
-   ウィンドウも同じランチャー管理のプライベートブラウザープロファイル内に留まり、別ブラウザーとの間で
-   セッションはコピーされません。
+1. ランチャー内蔵の ChatGPT ブラウザーで直接サインインします。ログインページと ID プロバイダーの
+   ウィンドウは、同じランチャー管理の非公開ブラウザープロファイル内に保持されます。ブラウザー間でセッションをコピーしません。
 2. ブラウザーのスモークテストを実行します。
-3. **モデルをインストール** を押し、Codex を一度再起動して **ChatGPT Web — …** モデルを選択します。
+3. **モデルをインストール**を押し、Codex を一度再起動して、**ChatGPT Web — …** モデルを選択します。
 
-セットアップ中、ランチャーは現在のアカウントで利用可能な ChatGPT コントロールを検出します。
-Free / Go では Luna のみ、Pro はログイン中のアカウントで実際に公開されている場合だけ表示されます。
-別ページの **MCP** は任意で、ターミナルコマンドを使わずに Full harness を設定できます。
+セットアップ時に、ランチャーが現在のアカウントの ChatGPT コントロールを検出します。
+Free/Go アカウントでは Luna のみが表示され、Pro はサインイン中のアカウントで利用可能な場合にのみ表示されます。
+独立した **MCP** ページは任意で、ターミナルコマンドを使わずに Full ハーネスの設定を案内します。
 
-パッケージ版ランチャーでは、ログインと ChatGPT モデルのターンを内蔵ブラウザー内で処理します。
-モデル API キー、インストール済み Chrome / Chromium、システム Node / Bun、
+パッケージ版ランチャーは、サインインと ChatGPT モデルのターンを内蔵ブラウザーで処理します。
+モデル API キー、インストール済みの Chrome/Chromium、システムの Node/Bun、
 プロジェクト管理のブラウザーダウンロードは不要です。
 
-**日本語版をソースから実行**
+**ソースから実行**
 
 ```bash
 git clone https://github.com/MatsuiRyusei/codex-chatgpt-web-jp.git && \
@@ -112,62 +114,69 @@ cd codex-chatgpt-web-jp && \
 bun run app
 ```
 
-このソース実行には Bun 1.4.0 が必要です。ロックされた依存関係をインストールしてアプリを起動します。
+この方法には Bun 1.4.0 が必要です。コマンドはロックされた依存関係をインストールしてアプリを開きます。
 
 ## モード
 
 | モード | モデル | ローカル Codex ツール | 追加設定 |
 | --- | --- | --- | --- |
-| **Browser-only** | Free/Go: Luna、Plus: Instant–High、Pro: Extra High と Pro を追加 | なし。Codex に警告が表示されます | なし |
-| **Full harness** | Free/Go: Luna、Plus: Instant–High、Pro: Extra High と Pro を追加 | 一覧にある全 effort（Pro を含む）で利用可 | OpenAI tunnel + ChatGPT connector |
+| **Browser-only** | Free/Go: Luna、Plus: Instant～High、Pro: Extra High と Pro を追加 | なし。Codex が警告を表示 | なし |
+| **Full harness（自動操作あり）** | Free/Go: Luna、Plus: Instant～High、Pro: Extra High と Pro を追加 | Pro を含むすべての表示 effort で使用可能 | OpenAI トンネル + ChatGPT コネクタ |
+| **Zero Risk** | ChatGPT のモデルと effort を手動で選択。Pro サイズのコンテキストも選択可能 | 使用可能。ターンに紐付いた完全な Codex ハーネスを維持 | 専用の OpenAI トンネル + `Codex Zero Risk` コネクタ。貼り付けと送信は手動 |
 
-モデル選択画面の各エントリには、固定の ChatGPT モードが1つ割り当てられます。
-Codex 自体の Effort / Speed 行は引き続き表示されますが、それを変更しても選択中のブラウザーモデルが
-暗黙に変わることはありません。Full モードでは利用可能なすべての effort に同じターン単位の MCP 機能が
-提供されます。Pro にだけ別の制限や縮小されたツール契約が設定されることはありません。
+自動モードのモデル選択画面では、各項目が 1 つの固定 ChatGPT モードに対応します。Codex には内蔵の Effort と Speed 行も表示されますが、
+それらを変更しても、選択済みのブラウザーモデルが黙って切り替わることはありません。
+Full モードでは、利用可能なすべての effort が同じターン紐付き MCP capability を受け取ります。
+Pro 専用の制限や縮小されたツール契約はありません。
 
-## Full harness
+Zero Risk はローカル Responses ブリッジと完全な Codex ハーネスを維持しますが、ChatGPT ページの
+読み取り・変更やプロンプトの自動送信は行いません。ランチャーがプロンプトを準備してコピーし、
+利用者がモデル、effort、`Codex Zero Risk` コネクタを選び、自分で貼り付けて送信します。
+これにより、ChatGPT のブラウザー自動操作に由来するアカウントリスクを避けます。
 
-Full モードでは、ChatGPT のツール呼び出しを公式の
-[OpenAI tunnel-client](https://github.com/openai/tunnel-client) 経由で現在の Codex タスクへ戻します。
-トンネルは outbound 接続であり、公開 IP の露出、受信ポートの開放、ルーターのポート転送は不要です。
+## Full ハーネス
 
-> [!WARNING]
-> **Codex Native2** という名前の**新しい**コネクタを作成し、権限を
-> **Allow all actions** に設定してください。既存の **Codex Native** コネクタを
-> 名前変更・更新・再利用しないでください。ChatGPT はコネクタ ID ごとに公開 MCP コントラクトを
-> キャッシュします。また **Allow low-risk actions** では、コマンドやパッチが Codex ハーネスへ届く前に
-> ブロックされます。
+Full モードは、公式の [OpenAI tunnel-client](https://github.com/openai/tunnel-client) を通じて、
+ChatGPT のツール呼び出しを現在の Codex タスクへ接続します。トンネルは外向きであり、公開 IP の露出、
+受信ポートの開放、ルーターのポート転送は不要です。
+
+ランチャーの **MCP** ページが設定全体を案内します。具体的な操作は
+[動画付きの手順](TROUBLESHOOTING.md)を参照してください。
+
+> **Limits**
+>
+> **GPT-5.6 Sol Pro** と **GPT-6 Astra** の現在の ChatGPT メッセージ上限については、
+> [Limits](https://github.com/miuuyy/codex-chatgpt-web/discussions/309) を参照してください。
+> Token コンテキスト上限は、アカウント種別と選択した effort によって異なります。Plus の
+> Medium/High は実測 90,000-token ウィンドウを使用し、実験的な **3× context** を有効にすると
+> 最大 270,000 tokens まで拡張されます。いずれの場合もネイティブ Codex compaction に対応します。
 
 1. ランチャーの必須セットアップを完了します。
-2. ランチャーで **MCP** を開きます。ChatGPT コネクタを利用するのと同じ OpenAI アカウントで
-   Tunnel と通常の API キーを作成します。キーの作成自体は無料で、モデル API クレジットは消費しません。
-3. Tunnel ID と API キーを貼り付け、**ハーネスを接続** を押します。
-4. ChatGPT 設定で **Developer Mode** を有効にします。**Tunnel** を使う**新しい**コネクタを作成し、
-   対象 Tunnel を選択、**Authentication** を **None** に設定し、名前を正確に **Codex Native2** とします。
-5. 古い **Codex Native** コネクタがある場合は、そのまま残してください。名前変更や更新はしないでください。
-   ChatGPT はコネクタ ID ごとに公開 MCP コントラクトをキャッシュし、このリリースでは新しい直接
-   turn-token コントラクトを使います。**Codex Native2** の **Permissions** では **Allow all actions** を
-   選択します。**Allow low-risk actions** ではコマンドとパッチがこのランタイムに届く前にブロックされます。
-   外側の Codex ハーネスでは引き続きサンドボックスと承認が適用されます。
-6. **ランタイムを検証** を実行します。検証では **Codex Native2** を厳密に選択します。
-   **Codex Native** しか見つからない場合は、旧コネクタを受け入れず明示的な移行エラーになります。
+2. ランチャーで **MCP** を開きます。ChatGPT コネクタを使用するものと同じ OpenAI アカウントで
+   Tunnel と通常の API キーを作成します。キーの作成は無料で、モデル API クレジットを消費しません。
+3. Tunnel ID と API キーを貼り付け、**ハーネスを接続**を押します。
+4. ChatGPT の設定で **Developer Mode** を有効にします。**Tunnel** を使う**新しい**コネクタを作成し、
+   対象の Tunnel を選択して、**Authentication** を **None**、名前を正確に **Codex Native2** に設定します。
+5. **Codex Native2** の **Permissions** で **Allow all actions** を選択します。
+   **Allow low-risk actions** では、コマンドとパッチがこのランタイムへ到達する前にブロックされます。
+   外側の Codex ハーネスでは、引き続きサンドボックスと承認が適用されます。
+6. **ランタイムを検証**を実行し、**Codex Native2** が接続済みで利用可能であることを確認します。
 
-書き込み / 変更操作には、ChatGPT ワークスペースと管理者ポリシー側でも許可が必要です。
-[Developer mode と MCP apps](https://help.openai.com/en/articles/12584461-developer-mode-and-mcp-apps-in-chatgpt)
-も参照してください。予期しない承認プロンプトは、`--auto-approve-tool-calls` を明示的に有効にしない限り
-失敗として扱われます。このオプションが押すのは **Allow once** だけで、恒久的な許可ではありません。
+書き込み／変更操作には、ChatGPT ワークスペースと管理者ポリシー側での許可も必要です。
+[Developer Mode と MCP アプリ](https://help.openai.com/en/articles/12584461-developer-mode-and-mcp-apps-in-chatgpt)を参照してください。
+予期しない承認プロンプトは、`--auto-approve-tool-calls` が明示的に有効でない限り fail-closed になります。
+このオプションが押すのは **Allow once** だけで、永続的な許可は付与しません。
 
 ## 運用
 
-安全なローカル診断には **アクティビティ**、End-to-end のヘルスチェックには
-**設定 → 診断を実行** を利用します。設定画面から保持中のブラウザーターンのキャンセルや、
-アンインストール前の Codex 連携削除も行えます。各ブラウザーチェックポイントでスクリーンショットが
-必要な場合のみ `CODEX_CHATGPT_WEB_BROWSER_DIAGNOSTICS=1` を設定してください。
+安全なローカル診断には **アクティビティ**、エンドツーエンドのヘルスチェックには
+**設定 → 診断を実行**を使用します。設定から、保持中のブラウザーターンのキャンセルや、
+アンインストール前の Codex 統合削除も行えます。すべてのブラウザーチェックポイントでスクリーンショットが必要な場合にのみ、
+`CODEX_CHATGPT_WEB_BROWSER_DIAGNOSTICS=1` を設定してください。
 
-新規インストールではクロスバックエンド subagent に **Compatibility V1** を利用します。
-**Native** は Codex 本来の feature 設定を保持し、プレーンテキストの Web-to-Web V2 delegation を有効にします。
-プロトコルを変更したら Codex を再起動し、新しいタスクを開始してください。
+新規インストールでは、クロスバックエンドのサブエージェントに **Compatibility V1** を使用します。
+**Native** は Codex 独自の機能設定を維持し、プレーンテキストの Web-to-Web V2 delegation を有効にします。
+プロトコル変更後は Codex を再起動し、新しいタスクを開始してください。
 
 ```bash
 codex-chatgpt-web subagents status
@@ -177,19 +186,18 @@ codex-chatgpt-web subagents native
 
 ## 制限とセキュリティ
 
-- これは OpenAI API ではなく、非公式のブラウザー自動化です。ChatGPT UI の変更により selector が
-  動作しなくなる可能性があります。その場合、別モデルや別トランスポートへ暗黙に切り替えずエラーになります。
-- ブラウザー状態は機密性の高いログイン情報です。loopback listener は同じローカルユーザーとして
-  動作するプロセスからアクセスできます。ランチャープロファイルを共有せず、信頼できる端末で利用してください。
-- リリースパッケージの対象は現在 macOS 13+（arm64/x64）、Windows x64、Linux x64 です。
-  ランタイム、テスト、パッケージングは CI 上で3環境すべてを確認し、アカウント依存のブラウザー / MCP フローは
-  別途 [release validation](docs/release-validation.md) で検証します。
-- ビルドはまだプラットフォーム署名されていないため、Gatekeeper や SmartScreen が警告する場合があります。
-  インストーラーはインストール前に公開 SHA-256 manifest を検証します。
+- これは非公式のブラウザー自動化であり、OpenAI API ではありません。ChatGPT UI の変更によりセレクターが壊れる可能性があります。
+  差異が発生した場合、モデルや転送方式を黙って切り替えず、明示的に失敗します。
+- ブラウザー状態は機密性の高いログイン情報です。また、loopback リスナーには同じローカルユーザーで動作する
+  プロセスからアクセスできます。ランチャープロファイルを共有せず、信頼できるワークステーションを使用してください。
+- リリースパッケージは現在、macOS 13+（arm64/x64）、Windows x64、Linux x64 を対象としています。
+  ランタイム、テスト、パッケージングは CI で 3 プラットフォームすべてに対して検証されます。
+  アカウント依存のブラウザー／MCP フローには、個別の[リリース検証](docs/release-validation.md)を使用します。
+- ビルドはまだプラットフォーム署名されていないため、Gatekeeper または SmartScreen が警告を表示する場合があります。
+  インストーラーは、インストール前に公開 SHA-256 マニフェストを検証します。
 
-Full モードを有効にする前に、[architecture](docs/architecture.md) と
-[security model](docs/security-model.md) を確認してください。脆弱性は
-[SECURITY.md](SECURITY.md) から報告してください。
+Full モードを有効にする前に、完全な[アーキテクチャ](docs/architecture.md)と
+[セキュリティモデル](docs/security-model.md)をお読みください。脆弱性は [SECURITY.md](SECURITY.md) から報告してください。
 
 ## 開発
 
@@ -203,44 +211,44 @@ bun run smoke:subagents
 bun run app:package
 ```
 
-`dev:launcher` は `~/.codex-chatgpt-web-dev` に2つ目のランチャープロファイルを作成します。
-Electron state、ブラウザー Cookie / ログイン、ChatGPT アカウント、設定、sandbox 化された
-`CODEX_HOME`、チャット、診断、broker、tunnel profile はすべて通常版と分離されます。
-通常のランチャーと同時に実行でき、Responses daemon の起動や Codex の変更は行いません。
-任意の Full セットアップでは、隔離された MCP tunnel だけを起動・監視し、
-別の ChatGPT コネクタ名 `Codex Native2 DEV` を使います。
+`dev:launcher` は `~/.codex-chatgpt-web-dev` に 2 つ目のランチャープロファイルを作成します。
+Electron state、ブラウザーの cookie／ログイン、ChatGPT アカウント、設定、サンドボックス化された `CODEX_HOME`、
+チャット、診断、broker、トンネルプロファイルは本番環境から分離されます。通常のランチャーと同時に実行でき、
+Responses daemon の起動や Codex の変更は行いません。任意の Full セットアップでは、独立した ChatGPT コネクタ名
+`Codex Native2 DEV` を使用し、隔離された MCP トンネルのみを起動・監視します。
 
-`dev:chat` は、名前付きで永続化される合成 outer-Codex harness です。現在の working tree を、
-隔離されたランチャーブラウザー、Temporary Chat、prompt compiler、Responses parser、
-compaction handler を通して実行します。任意の Full セットアップでは MCP connector と broker も検証し、
-ツール効果は明示的な simulation receipt として返されます。Browser-only chat には outer tool はありません。
-Responses listener を開いたり、`openai_base_url` を変更したり、稼働中 daemon を停止したり、
-port 17841 を使用済みとして扱ったりしません。メッセージなしで起動すると `/status`、
-`/fill 30000`、`/compact`、`/model`、`/reset` コマンドを利用できます。
-**DEV** と表示されたウィンドウ内で一度ログインし、プロファイルを初期化してください。
-シミュレーションのツールラウンドが必要な場合のみ、任意の Full harness を設定します。
-ランチャーは DEV tunnel を待機状態に保ち、名前付きチャットが必要に応じて broker を接続します。
-本番認証情報や `Codex Native2` コネクタが暗黙に再利用されることはありません。
-詳細は [DEV chat harness](docs/dev-chat.md) を参照してください。
+`dev:chat` は名前付きの永続的な synthetic outer-Codex ハーネスです。現在の作業ツリーを、隔離されたランチャーの
+ブラウザー、一時チャット、プロンプトコンパイラー、Responses parser、コンパクションハンドラーを通して実行します。
+任意の Full セットアップでは MCP コネクタと broker も検証され、ツールの効果は明示的なシミュレーション結果になります。
+Browser-only チャットは外側のツールを公開しません。Responses リスナーを開いたり、`openai_base_url` を変更したり、
+稼働中 daemon を停止したり、ポート 17841 を使用したりすることもありません。
+メッセージなしで実行すると、`/status`、`/fill 30000`、`/compact`、`/model`、`/reset` コマンドを使用できます。
+**DEV** と表示されたウィンドウ内で一度サインインし、プロファイルを初期化してください。
+シミュレーションツールのターンが必要な場合にのみ、任意の Full ハーネスを設定します。
+ランチャーは DEV トンネルを使用可能な状態に保ち、名前付きチャットは必要に応じて broker を接続します。
+本番の認証情報や `Codex Native2` コネクタが暗黙的に再利用されることはありません。
+[DEV chat ハーネス](docs/dev-chat.md)を参照してください。
 
-- [Architecture](docs/architecture.md)
-- [DEV chat harness](docs/dev-chat.md)
-- [Security model](docs/security-model.md)
-- [Contributing](CONTRIBUTING.md)
+- [アーキテクチャ](docs/architecture.md)
+- [DEV chat ハーネス](docs/dev-chat.md)
+- [セキュリティモデル](docs/security-model.md)
+- [トラブルシューティング](TROUBLESHOOTING.md)
+- [コントリビューションガイド](CONTRIBUTING.md)
 
-## Star History
+## Star の履歴
 
 <a href="https://www.star-history.com/?repos=miuuyy%2Fcodex-chatgpt-web&type=date&legend=top-left">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=miuuyy/codex-chatgpt-web&type=date&theme=dark&legend=top-left&sealed_token=hBVvg_eOjfMFDrfyeo5FPQkIwcvBEmXc6F7ZoOKnfFE4KPCs67o34w4XwVuM-bHGnKR-SKCAN_TSTWrzuqSBNU-RjNZCLT4f-xNs9qcDhciQtemxHKuuFj0N5YNqZIihdaQfakrh2ANhOrvP0K2LmLXX2zbsYyVaYZknyTnlYeIS_mOGvMcO32ZmPCHK">
     <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=miuuyy/codex-chatgpt-web&type=date&legend=top-left&sealed_token=hBVvg_eOjfMFDrfyeo5FPQkIwcvBEmXc6F7ZoOKnfFE4KPCs67o34w4XwVuM-bHGnKR-SKCAN_TSTWrzuqSBNU-RjNZCLT4f-xNs9qcDhciQtemxHKuuFj0N5YNqZIihdaQfakrh2ANhOrvP0K2LmLXX2zbsYyVaYZknyTnlYeIS_mOGvMcO32ZmPCHK">
-    <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=miuuyy/codex-chatgpt-web&type=date&legend=top-left&sealed_token=hBVvg_eOjfMFDrfyeo5FPQkIwcvBEmXc6F7ZoOKnfFE4KPCs67o34w4XwVuM-bHGnKR-SKCAN_TSTWrzuqSBNU-RjNZCLT4f-xNs9qcDhciQtemxHKuuFj0N5YNqZIihdaQfakrh2ANhOrvP0K2LmLXX2zbsYyVaYZknyTnlYeIS_mOGvMcO32ZmPCHK">
+    <img alt="Star 履歴チャート" src="https://api.star-history.com/chart?repos=miuuyy/codex-chatgpt-web&type=date&legend=top-left&sealed_token=hBVvg_eOjfMFDrfyeo5FPQkIwcvBEmXc6F7ZoOKnfFE4KPCs67o34w4XwVuM-bHGnKR-SKCAN_TSTWrzuqSBNU-RjNZCLT4f-xNs9qcDhciQtemxHKuuFj0N5YNqZIihdaQfakrh2ANhOrvP0K2LmLXX2zbsYyVaYZknyTnlYeIS_mOGvMcO32ZmPCHK">
   </picture>
 </a>
 
 ## 免責事項
 
-これは独立したソフトウェアであり、OpenAI との提携・承認関係はありません。
-自分自身のアカウントで、適用される
-[利用規約](https://openai.com/policies/terms-of-use/) とワークスペースポリシーに従って使用してください。
-認証やアクセス制御を回避するものではありません。
+これは独立したソフトウェアであり、OpenAI との提携や OpenAI による推奨を受けたものではありません。
+ご自身のアカウントで、適用される[利用規約](https://openai.com/policies/terms-of-use/)と
+ワークスペースポリシーに従って使用してください。認証やアクセス制御を回避するものではありません。
+
+問題が発生した場合は、[トラブルシューティング](TROUBLESHOOTING.md)を参照してください。
